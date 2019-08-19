@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import {
   createStackNavigator,
   createBottomTabNavigator,
@@ -18,6 +18,9 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 const defaultStackNavOptions = {
   headerStyle: {
     backgroundColor: Colors.primaryColor
+  },
+  headerTitleStyle: {
+    fontFamily: "open-sans-bold"
   },
   headerTintColor: "white"
 };
@@ -54,7 +57,13 @@ const tabScreenConfig = {
           <Ionicons name="ios-restaurant" size={25} color={tabInfo.tintColor} />
         );
       },
-      tabBarColor: Colors.primaryColor
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Meals</Text>
+        ) : (
+          "Meals"
+        )
     }
   },
   Favorites: {
@@ -63,7 +72,13 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />;
       },
-      tabBarColor: Colors.accentColor
+      tabBarColor: Colors.accentColor,
+      tabBarLabel:
+        Platform.OS === "android" ? (
+          <Text style={{ fontFamily: "open-sans-bold" }}>Favorites</Text>
+        ) : (
+          "Favorites"
+        )
     }
   }
 };
@@ -76,13 +91,24 @@ const MealsFavTabNavigator =
       })
     : createBottomTabNavigator(tabScreenConfig, {
         tabBarOptions: {
+          labelStyle: {
+            fontFamily: "open-sans"
+          },
           activeTintColor: Colors.accentColor
         }
       });
 
-const FiltersNavigator = createStackNavigator({
-  Filters: FilterScreen
-});
+const FiltersNavigator = createStackNavigator(
+  {
+    Filters: FilterScreen
+  },
+  {
+    // navigationOptions: {
+    //   drawerLabel: "filter!!"
+    // },
+    defaultNavigationOptions: defaultStackNavOptions
+  }
+);
 
 const MainNavigator = createDrawerNavigator(
   {
